@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>AI Assistant component (beta) | Sample | ArcGIS Maps SDK for JavaScript</title>
+    <script type="module" src="https://js.arcgis.com/5.0/"></script>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+
+  <body>
+    <calcite-shell>
+      <arcgis-map id="wheat-map" item-id="c13bffcad4a244a99062e915e9bc1dc3">
+        <arcgis-zoom slot="top-left"></arcgis-zoom>
+        <arcgis-expand slot="top-left">
+          <arcgis-legend></arcgis-legend>
+        </arcgis-expand>
+      </arcgis-map>
+      <calcite-shell-panel slot="panel-end" width="l" id="assistant-panel">
+        <calcite-panel>
+          <arcgis-assistant
+            log-enabled
+            copy-enabled
+            reference-element="#wheat-map"
+            heading="Change in wheat production 2017-2022"
+            description="Explore wheat production in the U.S. from 2017 to 2022."
+            entry-message="Hello! I'm here to help you explore changes in wheat production over the years.">
+            <arcgis-assistant-navigation-agent></arcgis-assistant-navigation-agent>
+            <arcgis-assistant-data-exploration-agent></arcgis-assistant-data-exploration-agent>
+            <arcgis-assistant-help-agent></arcgis-assistant-help-agent>
+          </arcgis-assistant>
+        </calcite-panel>
+      </calcite-shell-panel>
+    </calcite-shell>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
