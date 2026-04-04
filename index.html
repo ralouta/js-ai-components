@@ -10,8 +10,15 @@
 
   <body>
     <calcite-shell>
+      <calcite-navigation navigation-action slot="header">
+        <calcite-navigation-logo heading="Sample Application" icon="clustering" alt="Application logo" slot="logo">
+        </calcite-navigation-logo>
+        <calcite-action id="nav-action" icon="hamburger" text="Dashboard Options" class="nav-action"
+            slot="navigation-action"></calcite-action>
+      </calcite-navigation>
       <arcgis-map id="wheat-map" item-id="c13bffcad4a244a99062e915e9bc1dc3">
         <arcgis-zoom slot="top-left"></arcgis-zoom>
+        <arcgis-compass slot="bottom-right" visual-scale="l"></arcgis-compass>
         <arcgis-expand slot="top-left">
           <arcgis-legend></arcgis-legend>
         </arcgis-expand>
