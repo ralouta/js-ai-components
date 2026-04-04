@@ -9,3 +9,50 @@ body {
 calcite-shell {
   height: 100vh;
 }
+
+arcgis-map {
+  display: block;
+  height: 100%;
+}
+
+/* Error state */
+.error {
+  padding: 2rem;
+  color: var(--calcite-color-status-danger);
+}
+
+/* UserMenu popover content */
+.user-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  min-width: 260px;
+}
+
+.user-menu-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.user-menu-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.user-menu-username {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--calcite-color-text-3);
+}
+
+.user-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
