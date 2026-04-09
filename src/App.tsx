@@ -1,15 +1,49 @@
+import { useCallback } from "react";
 import { useAuth } from "./hooks/useAuth.js";
+import { useSettings } from "./hooks/useSettings.js";
+import { useCalciteDialog } from "./hooks/useCalciteDialog.js";
 import { UserMenu } from "./components/UserMenu.js";
 import { MapView } from "./components/MapView.js";
 import { AssistantPanel } from "./components/AssistantPanel.js";
+import { SettingsDialog } from "./components/SettingsDialog.js";
+import { MapIdDialog } from "./components/MapIdDialog.js";
 
 import "@esri/calcite-components/dist/components/calcite-shell";
 import "@esri/calcite-components/dist/components/calcite-navigation";
 import "@esri/calcite-components/dist/components/calcite-navigation-logo";
 import "@esri/calcite-components/dist/components/calcite-action";
 
+// NOTE: UX convenience flag only — not a security boundary.
+// Any user can append ?mode=edit; settings only affect their own session.
+const isEditMode =
+  new URLSearchParams(window.location.search).get("mode") === "edit";
+
 export default function App() {
   const { user, authError, signOut, switchAccount } = useAuth();
+
+  const {
+    config,
+    draft,
+    modalOpen,
+    openSettings,
+    applySettings,
+    cancelSettings,
+    setDraftMapId,
+    setDraftTitle,
+    setDraftHeading,
+    setDraftDescription,
+    setDraftColor,
+    setDraftFontFamily,
+    setDraftLogoUrl,
+    addPrompt,
+    updatePrompt,
+    removePrompt,
+    needsMapId,
+    confirmMapId,
+  } = useSettings();
+
+  const handleClose = useCallback(() => cancelSettings(), [cancelSettings]);
+  const dialogRef = useCalciteDialog(modalOpen, handleClose);
 
   if (authError) {
     return <div className="error">{authError}</div>;
@@ -19,22 +53,57 @@ export default function App() {
     <calcite-shell>
       <calcite-navigation slot="header">
         <calcite-navigation-logo
-          heading="Utrecht Historical Monuments"
-          icon="clustering"
+          heading={config.appTitle}
+          thumbnail={config.logoUrl || undefined}
           alt="Application logo"
           slot="logo"
         />
-        <calcite-action
-          id="nav-action"
-          icon="hamburger"
-          text="Dashboard Options"
-          slot="navigation-action"
-        />
-        {user && <UserMenu slot="user" user={user} onSignOut={signOut} onSwitchAccount={switchAccount} />}
+        {isEditMode && (
+          <calcite-action
+            slot="navigation-action"
+            icon="gear"
+            text="Settings"
+            onClick={openSettings}
+          />
+        )}
+        {user && (
+          <UserMenu
+            slot="user"
+            user={user}
+            onSignOut={signOut}
+            onSwitchAccount={switchAccount}
+          />
+        )}
       </calcite-navigation>
 
-      <MapView />
-      <AssistantPanel user={user} />
+      <MapView mapItemId={config.mapItemId} />
+      <AssistantPanel
+        user={user}
+        heading={config.chatHeading}
+        description={config.chatDescription}
+        suggestedPrompts={config.suggestedPrompts}
+      />
+
+      {needsMapId && <MapIdDialog onConfirm={confirmMapId} />}
+
+      {isEditMode && (
+        <SettingsDialog
+          dialogRef={dialogRef}
+          draft={draft}
+          onSetMapId={setDraftMapId}
+          onSetTitle={setDraftTitle}
+          onSetHeading={setDraftHeading}
+          onSetDescription={setDraftDescription}
+          onSetColor={setDraftColor}
+          onSetFontFamily={setDraftFontFamily}
+          onSetLogoUrl={setDraftLogoUrl}
+          onAddPrompt={addPrompt}
+          onUpdatePrompt={updatePrompt}
+          onRemovePrompt={removePrompt}
+          onApply={applySettings}
+          onCancel={cancelSettings}
+        />
+      )}
     </calcite-shell>
   );
 }
