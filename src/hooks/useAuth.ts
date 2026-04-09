@@ -15,8 +15,8 @@ export function useAuth(): UseAuthResult {
   useEffect(() => {
     setupAuth()
       .then(setUser)
-      .catch((err: unknown) => {
-        setAuthError(err instanceof Error ? err.message : "Sign-in failed");
+      .catch(() => {
+        setAuthError("Sign-in failed. Please check your credentials and try again.");
       });
   }, []);
 
