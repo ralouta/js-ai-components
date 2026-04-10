@@ -7,6 +7,8 @@ import "@arcgis/map-components/components/arcgis-zoom";
 import "@arcgis/map-components/components/arcgis-compass";
 import "@arcgis/map-components/components/arcgis-expand";
 import "@arcgis/map-components/components/arcgis-legend";
+import "@arcgis/map-components/components/arcgis-layer-list";
+import "@arcgis/map-components/components/arcgis-home";
 
 interface Props {
   mapItemId: string;
@@ -41,9 +43,13 @@ export function MapView({ mapItemId }: Props) {
     // and arcgisViewReadyChange fires again with the new item's initial extent
     <arcgis-map key={mapItemId} ref={mapRef} id="app-map" item-id={mapItemId}>
       <arcgis-zoom slot="top-left" />
+      <arcgis-home slot="top-left" />
       <arcgis-compass slot="bottom-right" />
       <arcgis-expand slot="top-left">
         <arcgis-legend />
+      </arcgis-expand>
+      <arcgis-expand slot="top-left">
+        <arcgis-layer-list />
       </arcgis-expand>
     </arcgis-map>
   );
