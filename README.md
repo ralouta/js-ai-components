@@ -7,6 +7,7 @@
 - **First-launch map ID dialog** — prompts for a WebMap Item ID on first visit; persists to `localStorage`
 - **OAuth 2.0 sign-in** — redirect-based via ArcGIS `OAuthInfo` + `IdentityManager`; user menu with avatar, name, sign-out, and switch-account
 - **ArcGIS web map** — loaded by item ID; zooms to the saved extent on load
+- **Map widgets** — zoom, home, compass, legend, and layer list with expand/collapse
 - **AI assistant panel** — three pre-configured agents: navigation, data-exploration, and help
 - **Runtime settings** (`?mode=edit`) — configure app title, logo, chat heading, suggested prompts, font, and colors without touching code
 - **Color theming** — full color control including chat input, suggested prompt chips, user message bubbles, and assistant reply backgrounds (shadow DOM injection)
@@ -73,7 +74,7 @@ App.tsx
 │   ├── calcite-navigation (header)
 │   │   └── UserMenu → calcite-navigation-user + calcite-popover (portaled to <body>)
 │   ├── MapView (default slot)
-│   │   └── arcgis-map → arcgis-zoom, arcgis-compass, arcgis-expand > arcgis-legend
+│   │   └── arcgis-map → arcgis-zoom, arcgis-home, arcgis-compass, arcgis-expand > arcgis-legend, arcgis-expand > arcgis-layer-list
 │   └── AssistantPanel (panel-end slot)
 │       └── arcgis-assistant
 │           ├── arcgis-assistant-navigation-agent
