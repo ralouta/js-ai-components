@@ -123,9 +123,14 @@ export function useSettings(): UseSettingsResult {
       colors: { ...draft.colors },
       suggestedPrompts: draft.suggestedPrompts.filter((p) => p.trim() !== ""),
     };
+    if (draft.mapItemId !== config.mapItemId) {
+      saveConfig(next);
+      window.location.reload();
+      return;
+    }
     setConfig(next);
     setModalOpen(false);
-  }, [draft]);
+  }, [draft, config.mapItemId]);
 
   const cancelSettings = useCallback(() => setModalOpen(false), []);
 

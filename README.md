@@ -62,6 +62,8 @@ Append `?mode=edit` to the URL to open the settings dialog. Changes are saved to
 | Appearance | Logo (URL or file upload), font family, 12 color slots |
 | Prompts | Suggested prompts list |
 
+> **Note:** Changing the map item ID triggers an automatic page reload so the `arcgis-assistant` component reconnects to the new map. All other setting changes apply in-place without a reload.
+
 ## Architecture
 
 ```
