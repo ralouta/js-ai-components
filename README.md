@@ -2,6 +2,10 @@
 
 > A React + TypeScript web app that loads an ArcGIS web map and pairs it with an AI assistant panel for natural-language exploration of the data. The entire look-and-feel is configurable at runtime — no code changes needed.
 
+## Demo
+
+[![Watch the demo on YouTube](https://img.youtube.com/vi/ltIho0DPVQg/maxresdefault.jpg)](https://youtu.be/ltIho0DPVQg)
+
 ## Features
 
 - **First-launch map ID dialog** — prompts for a WebMap Item ID on first visit; persists to `localStorage`
