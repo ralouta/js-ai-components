@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agriculture-assistant
+  labels:
+    app: agriculture-assistant
+spec:
+  type: ClusterIP
+  selector:
+    app: agriculture-assistant
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

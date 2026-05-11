@@ -1,7 +1,7 @@
 import type { Colors, ColorKey } from "../types/settings.js";
 
 export const DEFAULT_LOGO_URL = "";
-export const DEFAULT_APP_TITLE = "AI Components | JavaScript";
+export const DEFAULT_APP_TITLE = "Agriculture Assistant";
 export const DEFAULT_CHAT_HEADING = "Map Assistant";
 export const DEFAULT_CHAT_DESCRIPTION = "Ask questions about the map and its data.";
 
@@ -14,6 +14,7 @@ export const DEFAULT_PROMPTS: string[] = [
 export const DEFAULT_COLORS: Colors = {
   accentColor: "",
   headerBg: "",
+  headerText: "",
   chatHeaderBg: "",
   chatBg: "",
   chatInputBg: "",
@@ -30,6 +31,11 @@ export const COLOR_VARS: Record<ColorKey, readonly string[]> = {
   // Set directly on :root — Calcite 5 component-level CSS custom properties
   accentColor: ["--calcite-color-brand", "--calcite-color-brand-hover", "--calcite-color-brand-press"],
   headerBg: ["--calcite-navigation-background-color"],
+  headerText: [
+    "--calcite-navigation-text-color",
+    "--calcite-navigation-logo-heading-text-color",
+    "--calcite-navigation-logo-description-text-color",
+  ],
   chatHeaderBg: ["--calcite-panel-header-background-color"],
   chatBg: ["--calcite-panel-background-color", "--calcite-shell-panel-background-color"],
   // Scoped via a <style> tag targeting arcgis-assistant (see applyChatScopedColors)
@@ -49,6 +55,7 @@ export const COLOR_VARS: Record<ColorKey, readonly string[]> = {
 export const COLOR_LABELS: Record<ColorKey, string> = {
   accentColor: "Accent / Brand",
   headerBg: "Navigation Header",
+  headerText: "Navigation Header Text",
   chatHeaderBg: "Chat Panel Header Bar",
   chatBg: "Chat Background",
   chatInputBg: "Chat Input Background",
@@ -64,6 +71,7 @@ export const COLOR_LABELS: Record<ColorKey, string> = {
 export const COLOR_DEFAULTS: Record<ColorKey, string> = {
   accentColor: "#007ac2",
   headerBg: "#f3f3f3",
+  headerText: "#1b1b1b",
   chatHeaderBg: "#f3f3f3",
   chatBg: "#ffffff",
   chatInputBg: "#ffffff",
@@ -71,9 +79,9 @@ export const COLOR_DEFAULTS: Record<ColorKey, string> = {
   promptBg: "#e3f0fa",
   promptText: "#00619b",
   userMsgBg: "#d4eaf7",
-  userMsgText: "",
-  assistantReplyBg: "",
-  assistantReplyText: "",
+  userMsgText: "#1b1b1b",        // dark text
+  assistantReplyBg: "#ffffff",   // white background
+  assistantReplyText: "#141414", // very dark text
 };
 
 export const FONT_OPTIONS: { label: string; value: string }[] = [

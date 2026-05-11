@@ -6,9 +6,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // Keep ArcGIS SDK chunks separate for better caching
-        manualChunks: {
-          arcgis: ["@arcgis/core"],
+        // Vite 8/rolldown expects manualChunks as a function.
+        manualChunks(id) {
+          if (id.includes("@arcgis/core")) {
+            return "arcgis";
+          }
+          return undefined;
         },
       },
     },

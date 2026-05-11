@@ -1,6 +1,7 @@
 export type ColorKey =
   | "accentColor"
   | "headerBg"
+  | "headerText"
   | "chatHeaderBg"
   | "chatBg"
   | "chatInputBg"
@@ -15,6 +16,7 @@ export type ColorKey =
 export interface Colors {
   accentColor: string;
   headerBg: string;
+  headerText: string;
   chatHeaderBg: string;
   chatBg: string;
   chatInputBg: string;

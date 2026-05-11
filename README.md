@@ -8,58 +8,70 @@
 
 ## Features
 
-- **First-launch map ID dialog** — prompts for a WebMap Item ID on first visit; persists to `localStorage`
 - **OAuth 2.0 sign-in** — redirect-based via ArcGIS `OAuthInfo` + `IdentityManager`; user menu with avatar, name, sign-out, and switch-account
 - **ArcGIS web map** — loaded by item ID; zooms to the saved extent on load
 - **Map widgets** — zoom, home, compass, legend, and layer list with expand/collapse
 - **AI assistant panel** — three pre-configured agents: navigation, data-exploration, and help
 - **Runtime settings** (`?mode=edit`) — configure app title, logo, chat heading, suggested prompts, font, and colors without touching code
-- **Color theming** — full color control including chat input, suggested prompt chips, user message bubbles, and assistant reply backgrounds (shadow DOM injection)
+- **Color theming** — full color control including chat input, suggested prompt chips, user message bubbles, and assistant reply backgrounds
+- **Cross-browser config persistence** — optionally store settings in an ArcGIS Online item so configuration is shared across browsers and devices
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
-
-- Node.js 18+ and npm
-- A registered OAuth application at [developers.arcgis.com](https://developers.arcgis.com)
-- An ArcGIS Online web map with **AI vector embeddings generated**
+- **Node.js 18+** and npm
+- A registered **OAuth application** at [developers.arcgis.com](https://developers.arcgis.com)
+- An ArcGIS Online **web map** with AI vector embeddings generated
   (WebMap item → Settings → Manage AI vector embeddings → Generate embeddings)
 
-### Environment Setup
+For cloud deployment (optional):
+- [Docker](https://docs.docker.com/get-docker/)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) with the `containerapp` extension
+- An Azure Container Registry (ACR) and Container Apps environment
 
-Create a `.env` file in the project root:
+## Configuration
 
-```env
-VITE_ARCGIS_CLIENT_ID=your_oauth_app_id
-VITE_PORTAL_URL=https://www.arcgis.com
+All configuration lives in a single `.env` file. Copy the template and fill in your values:
+
+```bash
+cp .env.example .env
 ```
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `VITE_ARCGIS_CLIENT_ID` | Yes | OAuth client ID registered for this app |
-| `VITE_PORTAL_URL` | No | Portal base URL; defaults to `https://www.arcgis.com` |
+| `VITE_ARCGIS_CLIENT_ID` | Yes | OAuth client ID from [developers.arcgis.com](https://developers.arcgis.com) |
+| `VITE_PORTAL_URL` | No | Portal base URL (default: `https://www.arcgis.com`) |
+| `VITE_MAP_ITEM_ID` | No | Default WebMap item ID shown on first load |
+| `VITE_APP_TITLE` | No | Application title in the header |
+| `VITE_CONFIG_ITEM_ID` | No | ArcGIS item ID for cross-browser config persistence (see below) |
+| `AZURE_ACR_NAME` | No | Azure Container Registry name — only needed for `deploy.sh` |
+| `AZURE_RESOURCE_GROUP` | No | Azure resource group — only needed for `deploy.sh` |
+| `AZURE_APP_NAME` | No | Azure Container App name — only needed for `deploy.sh` |
 
-> The WebMap Item ID is not stored in `.env`. It is entered by the user on first launch and saved to `localStorage`.
-
-### Run Locally
+## Run Locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173. On first visit you will be prompted for a WebMap Item ID.
+Open http://localhost:5173.
 
-### Build for Production
+## Deploy to Azure (Optional)
+
+If you filled in the `AZURE_*` variables in `.env`:
 
 ```bash
-npm run build
-npm run preview
+chmod +x deploy.sh   # first time only
+./deploy.sh
 ```
+
+The script builds a `linux/amd64` Docker image, pushes it to your ACR, updates the Container App, and prints the live URL.
+
+> `VITE_*` variables are baked into the static bundle at build time. To change them, re-run `./deploy.sh`.
 
 ## Settings (`?mode=edit`)
 
-Append `?mode=edit` to the URL to open the settings dialog. Changes are saved to `localStorage` and applied immediately. Configurable options:
+Append `?mode=edit` to the URL to open the settings dialog. Configurable options:
 
 | Tab | Options |
 |-----|---------|
@@ -67,7 +79,17 @@ Append `?mode=edit` to the URL to open the settings dialog. Changes are saved to
 | Appearance | Logo (URL or file upload), font family, 12 color slots |
 | Prompts | Suggested prompts list |
 
-> **Note:** Changing the map item ID triggers an automatic page reload so the `arcgis-assistant` component reconnects to the new map. All other setting changes apply in-place without a reload.
+> Changing the map item ID triggers a page reload. All other changes apply in-place.
+
+### Cross-Browser Config Persistence
+
+By default, settings are stored in `localStorage` (per-browser). To share configuration across browsers and devices:
+
+1. Create a new ArcGIS Online item of type **Web Mapping Application**
+2. Share the item **publicly** (Everyone) so any visitor can read the config
+3. Set `VITE_CONFIG_ITEM_ID` in `.env`
+
+The app reads config publicly on load and writes on Save & Apply (requires the signed-in user to be the item owner).
 
 ## Architecture
 
@@ -76,7 +98,7 @@ App.tsx
 ├── MapIdDialog          — first-launch gate (renders if no mapItemId in localStorage)
 ├── calcite-shell
 │   ├── calcite-navigation (header)
-│   │   └── UserMenu → calcite-navigation-user + calcite-popover (portaled to <body>)
+│   │   └── UserMenu → calcite-navigation-user + calcite-popover
 │   ├── MapView (default slot)
 │   │   └── arcgis-map → arcgis-zoom, arcgis-home, arcgis-compass, arcgis-expand > arcgis-legend, arcgis-expand > arcgis-layer-list
 │   └── AssistantPanel (panel-end slot)
@@ -105,4 +127,6 @@ src/
   App.tsx
   main.tsx
   style.css
+deploy.sh                    # One-command Azure Container Apps deployment
+.env.example                 # Configuration template
 ```

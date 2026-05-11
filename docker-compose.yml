@@ -1,0 +1,15 @@
+# Local Docker test — mirrors the production container exactly.
+# Run: docker compose up --build
+# Then open http://localhost:8080
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_ARCGIS_CLIENT_ID: ${VITE_ARCGIS_CLIENT_ID}
+        VITE_PORTAL_URL: ${VITE_PORTAL_URL:-https://www.arcgis.com}
+        VITE_MAP_ITEM_ID: ${VITE_MAP_ITEM_ID}
+        VITE_APP_TITLE: ${VITE_APP_TITLE:-Agriculture Assistant}
+    ports:
+      - "8080:80"
+    # .env is read automatically by docker compose for the build args above

@@ -21,6 +21,7 @@ const SAFE_PORTAL_URL = (() => {
 })();
 
 export interface AuthUser {
+  canEdit: boolean;
   fullName: string;
   username: string;
   thumbnailUrl: string | null;
@@ -50,6 +51,7 @@ export async function setupAuth(): Promise<AuthUser> {
     username: portal.user?.username ?? "unknown",
     thumbnailUrl: portal.user?.thumbnailUrl ?? null,
     portalUrl: SAFE_PORTAL_URL,
+    canEdit: ["org_admin", "org_publisher"].includes(portal.user?.role ?? ""),
   };
 }
 
