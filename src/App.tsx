@@ -12,10 +12,11 @@ import "@esri/calcite-components/dist/components/calcite-shell";
 import "@esri/calcite-components/dist/components/calcite-navigation";
 import "@esri/calcite-components/dist/components/calcite-navigation-logo";
 import "@esri/calcite-components/dist/components/calcite-action";
+import "@esri/calcite-components/dist/components/calcite-notice";
 
-// NOTE: UX convenience flag only — not a security boundary.
-// Any user can append ?mode=edit; settings only affect their own session.
-const isEditMode =
+// Edit mode requires both the URL flag and an org admin/publisher account.
+// Public users who append ?mode=edit will not see the settings gear.
+const urlRequestsEdit =
   new URLSearchParams(window.location.search).get("mode") === "edit";
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
     addPrompt,
     updatePrompt,
     removePrompt,
+    remoteSaveError,
     needsMapId,
     confirmMapId,
   } = useSettings();
@@ -58,7 +60,7 @@ export default function App() {
           alt="Application logo"
           slot="logo"
         />
-        {isEditMode && (
+        {urlRequestsEdit && user?.canEdit && (
           <calcite-action
             slot="navigation-action"
             icon="gear"
@@ -86,7 +88,7 @@ export default function App() {
 
       {needsMapId && <MapIdDialog onConfirm={confirmMapId} />}
 
-      {isEditMode && (
+      {urlRequestsEdit && user?.canEdit && (
         <SettingsDialog
           dialogRef={dialogRef}
           draft={draft}
@@ -100,6 +102,7 @@ export default function App() {
           onAddPrompt={addPrompt}
           onUpdatePrompt={updatePrompt}
           onRemovePrompt={removePrompt}
+          remoteSaveError={remoteSaveError}
           onApply={applySettings}
           onCancel={cancelSettings}
         />

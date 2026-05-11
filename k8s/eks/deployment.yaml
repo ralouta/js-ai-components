@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agriculture-assistant
+  labels:
+    app: agriculture-assistant
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agriculture-assistant
+  template:
+    metadata:
+      labels:
+        app: agriculture-assistant
+    spec:
+      containers:
+        - name: agriculture-assistant
+          image: REPLACE_WITH_REGISTRY/agriculture-assistant:REPLACE_WITH_TAG
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
