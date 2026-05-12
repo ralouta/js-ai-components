@@ -8,7 +8,7 @@
 
 ## Features
 
-- **OAuth 2.0 sign-in** — redirect-based via ArcGIS `OAuthInfo` + `IdentityManager`; user menu with avatar, name, sign-out, and switch-account
+- **OAuth 2.0 sign-in** — standalone mode uses ArcGIS `OAuthInfo` + `IdentityManager`; embedded mode uses a popup relay so sign-in completes once without duplicate prompts; user menu shows avatar, name, and sign-out
 - **ArcGIS web map** — loaded by item ID; zooms to the saved extent on load
 - **Map widgets** — zoom, home, compass, legend, and layer list with expand/collapse
 - **AI assistant panel** — three pre-configured agents: navigation, data-exploration, and help
@@ -85,9 +85,16 @@ Append `?mode=edit` to the URL to open the settings dialog. Configurable options
 
 By default, settings are stored in `localStorage` (per-browser). To share configuration across browsers and devices:
 
-1. Create a new ArcGIS Online item of type **Web Mapping Application**
-2. Share the item **publicly** (Everyone) so any visitor can read the config
-3. Set `VITE_CONFIG_ITEM_ID` in `.env`
+1. Sign in to [ArcGIS Online](https://www.arcgis.com) → **Content** → **My Content**
+2. Click **New item** → choose **Application** → select **Web Mapping** as the type
+3. Give it a title (e.g. "Agriculture Assistant Config") and click **Save**
+4. Open the newly created item → **Settings** tab → **Sharing** → share with **Everyone (public)** so any visitor can read the config
+5. Copy the **item ID** from the item's URL (the hex string after `id=`, e.g. `https://www.arcgis.com/home/item.html?id=abc123...`)
+6. Add it to your `.env` file:
+   ```bash
+   VITE_CONFIG_ITEM_ID=abc123...
+   ```
+7. Restart the dev server or re-run `./deploy.sh` to pick up the change
 
 The app reads config publicly on load and writes on Save & Apply (requires the signed-in user to be the item owner).
 
@@ -112,7 +119,7 @@ App.tsx
 
 ```
 src/
-  auth.ts                    # OAuth setup, signOut(), switchAccount()
+  auth.ts                    # OAuth setup, embedded popup relay, signOut()
   constants/settings.ts      # Default config, color tokens, shadow DOM injection
   types/settings.ts          # AppConfig, Colors, ColorKey types
   hooks/

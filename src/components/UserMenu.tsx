@@ -10,12 +10,11 @@ interface Props {
   slot?: string;
   user: AuthUser;
   onSignOut: () => void;
-  onSwitchAccount: () => void;
 }
 
 // calcite-popover natively toggles when its referenceElement is clicked.
 // No manual click handler needed — adding one causes a double-toggle (open then close).
-export function UserMenu({ slot, user, onSignOut, onSwitchAccount }: Props) {
+export function UserMenu({ slot, user, onSignOut }: Props) {
   return (
     <>
       <calcite-navigation-user
@@ -46,14 +45,6 @@ export function UserMenu({ slot, user, onSignOut, onSwitchAccount }: Props) {
               </div>
             </div>
             <div className="user-menu-actions">
-              <calcite-button
-                appearance="solid"
-                width="full"
-                icon-start="switch"
-                onClick={onSwitchAccount}
-              >
-                Switch Account
-              </calcite-button>
               <calcite-button
                 appearance="outline"
                 width="full"
