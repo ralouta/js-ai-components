@@ -9,6 +9,7 @@ import "@arcgis/map-components/components/arcgis-expand";
 import "@arcgis/map-components/components/arcgis-legend";
 import "@arcgis/map-components/components/arcgis-layer-list";
 import "@arcgis/map-components/components/arcgis-home";
+import "@arcgis/map-components/components/arcgis-basemap-gallery";
 
 interface Props {
   mapItemId: string;
@@ -50,6 +51,9 @@ export function MapView({ mapItemId }: Props) {
       </arcgis-expand>
       <arcgis-expand slot="top-left">
         <arcgis-layer-list />
+      </arcgis-expand>
+      <arcgis-expand slot="top-left">
+        <arcgis-basemap-gallery />
       </arcgis-expand>
     </arcgis-map>
   );

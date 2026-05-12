@@ -41,7 +41,7 @@ export function AssistantPanel({ user, heading, description, suggestedPrompts, c
         )}
         <arcgis-assistant
           ref={assistantRef}
-          {...(import.meta.env.DEV ? { "log-enabled": true } : {})}
+          log-enabled
           copy-enabled
           reference-element="#app-map"
           heading={heading}
