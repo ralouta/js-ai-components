@@ -13,6 +13,7 @@ import "@esri/calcite-components/dist/components/calcite-navigation";
 import "@esri/calcite-components/dist/components/calcite-navigation-logo";
 import "@esri/calcite-components/dist/components/calcite-action";
 import "@esri/calcite-components/dist/components/calcite-notice";
+import "@esri/calcite-components/dist/components/calcite-button";
 import "@esri/calcite-components/dist/components/calcite-icon";
 
 // Edit mode requires both the URL flag and an org admin/publisher account.
@@ -21,7 +22,7 @@ const urlRequestsEdit =
   new URLSearchParams(window.location.search).get("mode") === "edit";
 
 export default function App() {
-  const { user, authError, signOut, switchAccount } = useAuth();
+  const { user, authError, needsSignIn, loading, handleSignIn, signOut } = useAuth();
 
   // Mobile panel toggle — starts collapsed on narrow screens
   const [panelOpen, setPanelOpen] = useState(() => window.innerWidth > 768);
@@ -65,8 +66,30 @@ export default function App() {
   const handleClose = useCallback(() => cancelSettings(), [cancelSettings]);
   const dialogRef = useCalciteDialog(modalOpen, handleClose);
 
-  if (authError) {
+  if (loading) return null;
+
+  if (authError && !needsSignIn) {
     return <div className="error">{authError}</div>;
+  }
+
+  if (needsSignIn) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", gap: "16px" }}>
+        <calcite-notice open icon="lock" kind="brand" scale="l" width="auto">
+          <span slot="title">Authentication required</span>
+          <span slot="message">Sign in with your ArcGIS account to use this application.</span>
+        </calcite-notice>
+        <calcite-button
+          appearance="solid"
+          scale="l"
+          icon-start="sign-in"
+          onClick={handleSignIn}
+          style={{ "--calcite-color-brand": "#007ac2", "--calcite-color-brand-hover": "#00619b", "--calcite-color-brand-press": "#004874" } as React.CSSProperties}
+        >
+          Sign In
+        </calcite-button>
+      </div>
+    );
   }
 
   return (
@@ -91,7 +114,6 @@ export default function App() {
             slot="user"
             user={user}
             onSignOut={signOut}
-            onSwitchAccount={switchAccount}
           />
         )}
       </calcite-navigation>
