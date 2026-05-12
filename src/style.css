@@ -219,4 +219,84 @@ arcgis-map {
   color: var(--calcite-color-text-3);
 }
 
+/* ── Mobile / Responsive ── */
+
+/* Floating chat toggle – hidden on desktop */
+.mobile-chat-fab {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Floating action button to toggle the chat panel */
+  .mobile-chat-fab {
+    display: flex;
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 500;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--calcite-color-brand, #007ac2);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .mobile-chat-fab:active {
+    transform: scale(0.92);
+  }
+
+  .mobile-chat-fab calcite-icon {
+    color: #fff;
+  }
+
+  /* Hide the FAB when the panel is open so it doesn't overlap */
+  .mobile-chat-fab.panel-open {
+    display: none;
+  }
+
+  /* Assistant panel: overlay full-screen on mobile */
+  calcite-shell-panel[slot="panel-end"] {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    width: 100% !important;
+    --calcite-shell-panel-width: 100% !important;
+    --calcite-shell-panel-max-width: 100% !important;
+    transition: transform 0.3s ease;
+  }
+
+  calcite-shell-panel[slot="panel-end"][collapsed] {
+    transform: translateX(100%);
+    pointer-events: none;
+  }
+
+  /* Close button inside the panel header – only visible on mobile */
+  .mobile-panel-close {
+    display: inline-flex !important;
+  }
+
+  /* Let map widgets breathe above the FAB */
+  arcgis-map {
+    height: 100%;
+  }
+
+  /* Tighten navigation logo on small screens */
+  calcite-navigation-logo {
+    --calcite-font-size-0: 0.875rem;
+  }
+}
+
+/* Desktop: hide the mobile-only close button */
+@media (min-width: 769px) {
+  .mobile-panel-close {
+    display: none !important;
+  }
+}
+
 
