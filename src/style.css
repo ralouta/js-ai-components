@@ -300,3 +300,10 @@ arcgis-map {
 }
 
 
+
+/* Prevent mobile browser auto-zoom on input focus (font-size < 16px triggers zoom) */
+@media (max-width: 768px) {
+  input, textarea, select, calcite-input, calcite-text-area {
+    font-size: 16px !important;
+  }
+}
